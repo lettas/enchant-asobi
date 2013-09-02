@@ -18,17 +18,17 @@ window.onload = function() {
     scene.addChild(player);
 
     for (var i = 0; i < 320 / 16; i++) {
-      var ground = new Map(7);
+      var ground = new MapChip(7);
       ground.position = {x: i * 16 + 8, y: 480 - 16 + 8};
       scene.addChild(ground);
     }
 
     for (var i = 0; i < (480 / 16) - 1; i++) {
-      var wall = new Map(3);
+      var wall = new MapChip(3);
       wall.position = {x: 8, y: i * 16 + 8};
       scene.addChild(wall);
 
-      var wall = new Map(3);
+      var wall = new MapChip(3);
       wall.position = {x: 320 - 8, y: i * 16 + 8};
       scene.addChild(wall);
     }
@@ -64,7 +64,7 @@ var Player = Class.create(PhyBoxSprite, {
     }
 });
 
-var Map = Class.create(PhyBoxSprite, {
+var MapChip = Class.create(PhyBoxSprite, {
     initialize: function (n) {
       PhyBoxSprite.call(this, 16, 16, enchant.box2d.STATIC_SPRITE, 0.0, 0.5, 0, true);
       this.image = game.assets['img/map0.png'];
