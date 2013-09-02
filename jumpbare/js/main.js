@@ -1,48 +1,48 @@
 enchant();
 
-var GRAVITY = 1;
 var game;
+var physicsWorld;
 
 window.onload = function() {
   game = new Core(320, 480);
-  game.fps = 15;
+  game.fps = 30;
   game.preload(['img/chara1.png']);
   game.rootScene.backgroundColor = '#000000';
   game.onload = function() {
+    physicsWorld = new PhysicsWorld(0.0, 9.8);
+
     var scene = game.rootScene;
+    scene.onenterframe = function(e) {
+      physicsWorld.step(game.fps);
+    };
 
     var player = new Player();
-    player.moveTo(160, 240);
+    player.position = {x:160, y:240};
     scene.addChild(player);
 
     scene.ontouchstart = function(e) {
-      var vx = (e.x > 160) ? 2.5 : -2.5;
+      var vx = (e.x > 160) ? 25 : -25;
       player.jump(vx);
     }
   };
   game.start();
 };
 
-var Player = Class.create(Sprite, {
+var Player = Class.create(PhyBoxSprite, {
     initialize: function () {
-      Sprite.call(this, 32, 32);
+      PhyBoxSprite.call(this, 32, 32, enchant.box2d.DYNAMIC_SPRITE, 1.0, 0.9, 0.3, true);
       this.image = game.assets['img/chara1.png'];
       this.frame = 0;
-      this.vx = 0;
-      this.vy = 0;
     },
 
     onenterframe: function() {
-      this.vy += GRAVITY;
-      this.x += this.vx;
-      this.y += this.vy;
       this.scaleX = (this.vx == 0) ? this.scaleX : (this.vx > 0) ? 1 : -1;
       this.frame  = (this.vy == 0) ? 0 : (this.vy > 0) ? 3 : 1;
     },
 
     jump: function(vx) {
-      this.vy = -10;
       this.vx = vx;
+      this.vy = -200;
     }
 });
 
