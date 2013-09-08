@@ -6,7 +6,7 @@ var physicsWorld;
 window.onload = function() {
   game = new Core(320, 480);
   game.fps = 30;
-  game.preload(['img/chara1.png', 'img/map0.png']);
+  game.preload(['img/chara1.png', 'img/map0.png', 'img/effect0.png']);
   game.rootScene.backgroundColor = '#99AAFF';
   game.onload = function() {
     physicsWorld = new PhysicsWorld(0.0, 9.8);
@@ -37,6 +37,11 @@ window.onload = function() {
       var vx = (e.x > 160) ? 25 : -25;
       player.jump(vx);
       player.setAwake(true);
+
+      var effect = new Effect();
+      effect.x = player.x + 8;
+      effect.y = player.y + player.height;
+      scene.addChild(effect);
     }
 
     scene.onenterframe = function(e) {
@@ -69,6 +74,21 @@ var MapChip = Class.create(PhyBoxSprite, {
       PhyBoxSprite.call(this, 16, 16, enchant.box2d.STATIC_SPRITE, 0.0, 0.5, 0, true);
       this.image = game.assets['img/map0.png'];
       this.frame = n;
+    },
+});
+
+var Effect = Class.create(Sprite, {
+    initialize: function () {
+      Sprite.call(this, 16, 16);
+      this.image = game.assets['img/effect0.png'];
+      this.frame = 0;
+    },
+
+    onenterframe: function() {
+      this.frame += 1;
+      if (this.frame >= 5) {
+        game.rootScene.removeChild(this);
+      }
     },
 });
 
