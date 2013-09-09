@@ -4,7 +4,7 @@ var game;
 var physicsWorld;
 
 window.onload = function() {
-  game = new Core(320, 480);
+  game = new Core(640, 960);
   game.fps = 30;
   game.preload(['img/chara1.png', 'img/map0.png', 'img/effect0.png']);
   game.rootScene.backgroundColor = '#99AAFF';
