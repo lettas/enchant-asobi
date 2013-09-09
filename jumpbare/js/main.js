@@ -10,16 +10,13 @@ var MAPCHIP_SPRITE_HEIGHT = 16;
 var EFFECT_SPRITE_WIDTH = 16;
 var EFFECT_SPRITE_HEIGHT = 16;
 
-var game;
-var physicsWorld;
-
 window.onload = function() {
-  game = new Core(CANVAS_WIDTH, CANVAS_HEIGHT);
+  var game = new Core(CANVAS_WIDTH, CANVAS_HEIGHT);
   game.fps = 30;
   game.preload(['img/chara1.png', 'img/map0.png', 'img/effect0.png']);
   game.rootScene.backgroundColor = '#99AAFF';
   game.onload = function() {
-    physicsWorld = new PhysicsWorld(0.0, 9.8);
+    var physicsWorld = new PhysicsWorld(0.0, 9.8);
 
     var scene = game.rootScene;
 
@@ -49,7 +46,7 @@ window.onload = function() {
       player.setAwake(true);
 
       var effect = new Effect();
-      effect.x = player.x + EFFECT_SPRITE_WIDTH;
+      effect.x = player.x + EFFECT_SPRITE_WIDTH / 2;
       effect.y = player.y + player.height;
       scene.addChild(effect);
     }
@@ -64,6 +61,7 @@ window.onload = function() {
 var Player = Class.create(PhyBoxSprite, {
     initialize: function () {
       PhyBoxSprite.call(this, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT, enchant.box2d.DYNAMIC_SPRITE, 0.0, 0.5, 0, true);
+      var game = Core.instance;
       this.image = game.assets['img/chara1.png'];
       this.frame = 0;
     },
@@ -82,6 +80,7 @@ var Player = Class.create(PhyBoxSprite, {
 var MapChip = Class.create(PhyBoxSprite, {
     initialize: function (n) {
       PhyBoxSprite.call(this, MAPCHIP_SPRITE_WIDTH, MAPCHIP_SPRITE_HEIGHT, enchant.box2d.STATIC_SPRITE, 0.0, 0.5, 0, true);
+      var game = Core.instance;
       this.image = game.assets['img/map0.png'];
       this.frame = n;
     },
@@ -90,6 +89,7 @@ var MapChip = Class.create(PhyBoxSprite, {
 var Effect = Class.create(Sprite, {
     initialize: function () {
       Sprite.call(this, EFFECT_SPRITE_WIDTH, EFFECT_SPRITE_HEIGHT);
+      var game = Core.instance;
       this.image = game.assets['img/effect0.png'];
       this.frame = 0;
     },
@@ -97,8 +97,14 @@ var Effect = Class.create(Sprite, {
     onenterframe: function() {
       this.frame += 1;
       if (this.frame >= 5) {
-        game.rootScene.removeChild(this);
+        this.destroy();
       }
+    },
+
+    destroy: function() {
+      var game = Core.instance;
+      var scene = game.rootScene;
+      scene.removeChild(this);
     },
 });
 
