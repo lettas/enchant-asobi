@@ -15,21 +15,17 @@ var GameScene = enchant.Class.create(enchant.Scene, {
   },
 
   initializeMap: function(game) {
-    for (var i = 0; i < game.width / MapChip.size.width; i++) {
-      var ground = new MapChip(MapChip.frames.ground);
-      ground.position = {x: i * MapChip.size.width + MapChip.size.width / 2, y: game.height - MapChip.size.height + MapChip.size.height / 2};
-      this.addChild(ground);
-    }
+    var ground = new MapChip(MapChip.frames.ground, game.width, MapChip.size.height);
+    ground.position = {x: game.width / 2, y: game.height - MapChip.size.height / 2};
+    this.addChild(ground);
 
-    for (var i = 0; i < (game.height/ MapChip.size.height) - 1; i++) {
-      var wall = new MapChip(MapChip.frames.wall);
-      wall.position = {x: MapChip.size.width / 2, y: i * MapChip.size.height + MapChip.size.height / 2};
-      this.addChild(wall);
+    var wall_left = new MapChip(MapChip.frames.wall, MapChip.size.width, game.height - MapChip.size.height);
+    wall_left.position = {x: MapChip.size.width / 2, y : (game.height - MapChip.size.height) / 2};
+    this.addChild(wall_left);
 
-      var wall = new MapChip(MapChip.frames.wall);
-      wall.position = {x: game.width - MapChip.size.width / 2, y: i * MapChip.size.height + MapChip.size.height / 2};
-      this.addChild(wall);
-    }
+    var wall_right = new MapChip(MapChip.frames.wall, MapChip.size.width, game.height - MapChip.size.height);
+    wall_right.position = {x: game.width - MapChip.size.width / 2, y : (game.height - MapChip.size.height) / 2};
+    this.addChild(wall_right);
   },
 
   ontouchstart: function(e) {
