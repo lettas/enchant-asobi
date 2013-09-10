@@ -33,7 +33,7 @@ var GameScene = enchant.Class.create(enchant.Scene, {
   },
 
   ontouchstart: function(e) {
-    var vx = (e.x > 160) ? 25 : -25;
+    var vx = (e.x > 160) ? 50 : -50;
     this.player.jump(vx);
     if (this.player.sleep) {
       this.player.setAwake(true);
