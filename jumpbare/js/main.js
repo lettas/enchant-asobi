@@ -10,10 +10,14 @@ var MAPCHIP_SPRITE_HEIGHT = 16;
 var EFFECT_SPRITE_WIDTH = 16;
 var EFFECT_SPRITE_HEIGHT = 16;
 
+// NOTE: tesiting Resource
+Resource.pushAssets('img/chara1.png');
+Resource.pushAssets(['img/map0.png', 'img/effect0.png']);
+
 window.onload = function() {
   var game = new Core(CANVAS_WIDTH, CANVAS_HEIGHT);
   game.fps = 30;
-  game.preload(['img/chara1.png', 'img/map0.png', 'img/effect0.png']);
+  game.preload(Resource.assets);
   game.rootScene.backgroundColor = '#99AAFF';
   game.onload = function() {
     var physicsWorld = new PhysicsWorld(0.0, 9.8);
