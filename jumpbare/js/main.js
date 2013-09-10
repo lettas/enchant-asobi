@@ -1,18 +1,8 @@
 enchant();
 var CANVAS_WIDTH = 320;
 var CANVAS_HEIGHT = 320;
-var MAPCHIP_GROUND = 7;
-var MAPCHIP_WALL = 3;
-var PLAYER_SPRITE_WIDTH = 32;
-var PLAYER_SPRITE_HEIGHT = 32;
-var MAPCHIP_SPRITE_WIDTH = 16;
-var MAPCHIP_SPRITE_HEIGHT = 16;
-var EFFECT_SPRITE_WIDTH = 16;
-var EFFECT_SPRITE_HEIGHT = 16;
 
 // NOTE: tesiting Resource
-Resource.pushAssets('img/chara1.png');
-Resource.pushAssets(['img/map0.png', 'img/effect0.png']);
 
 window.onload = function() {
   var game = new Core(CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -28,19 +18,19 @@ window.onload = function() {
     player.position = {x: game.width / 2, y: game.height / 2};
     scene.addChild(player);
 
-    for (var i = 0; i < game.width / MAPCHIP_SPRITE_WIDTH; i++) {
-      var ground = new MapChip(MAPCHIP_GROUND);
-      ground.position = {x: i * MAPCHIP_SPRITE_WIDTH + MAPCHIP_SPRITE_WIDTH / 2, y: game.height - MAPCHIP_SPRITE_HEIGHT + MAPCHIP_SPRITE_HEIGHT / 2};
+    for (var i = 0; i < game.width / MapChip.size.width; i++) {
+      var ground = new MapChip(MapChip.frames.ground);
+      ground.position = {x: i * MapChip.size.width + MapChip.size.width / 2, y: game.height - MapChip.size.height + MapChip.size.height / 2};
       scene.addChild(ground);
     }
 
-    for (var i = 0; i < (game.height/ MAPCHIP_SPRITE_HEIGHT) - 1; i++) {
-      var wall = new MapChip(MAPCHIP_WALL);
-      wall.position = {x: MAPCHIP_SPRITE_WIDTH / 2, y: i * MAPCHIP_SPRITE_HEIGHT + MAPCHIP_SPRITE_HEIGHT / 2};
+    for (var i = 0; i < (game.height/ MapChip.size.height) - 1; i++) {
+      var wall = new MapChip(MapChip.frames.wall);
+      wall.position = {x: MapChip.size.width / 2, y: i * MapChip.size.height + MapChip.size.height / 2};
       scene.addChild(wall);
 
-      var wall = new MapChip(MAPCHIP_WALL);
-      wall.position = {x: game.width - MAPCHIP_SPRITE_WIDTH / 2, y: i * MAPCHIP_SPRITE_HEIGHT + MAPCHIP_SPRITE_HEIGHT / 2};
+      var wall = new MapChip(MapChip.frames.wall);
+      wall.position = {x: game.width - MapChip.size.width / 2, y: i * MapChip.size.height + MapChip.size.height / 2};
       scene.addChild(wall);
     }
 
@@ -50,7 +40,7 @@ window.onload = function() {
       player.setAwake(true);
 
       var effect = new Effect();
-      effect.x = player.x + EFFECT_SPRITE_WIDTH / 2;
+      effect.x = player.x + Effect.size.width / 2;
       effect.y = player.y + player.height;
       scene.addChild(effect);
     }
@@ -61,54 +51,4 @@ window.onload = function() {
   };
   game.start();
 };
-
-var Player = Class.create(PhyBoxSprite, {
-    initialize: function () {
-      PhyBoxSprite.call(this, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT, enchant.box2d.DYNAMIC_SPRITE, 0.0, 0.5, 0, true);
-      var game = Core.instance;
-      this.image = game.assets['img/chara1.png'];
-      this.frame = 0;
-    },
-
-    onenterframe: function() {
-      this.scaleX = (this.vx == 0) ? this.scaleX : (this.vx > 0) ? 1 : -1;
-      this.frame  = (this.vy == 0) ? 0 : (this.vy > 0) ? 3 : 1;
-    },
-
-    jump: function(vx) {
-      this.vx = vx;
-      this.vy = -200;
-    }
-});
-
-var MapChip = Class.create(PhyBoxSprite, {
-    initialize: function (n) {
-      PhyBoxSprite.call(this, MAPCHIP_SPRITE_WIDTH, MAPCHIP_SPRITE_HEIGHT, enchant.box2d.STATIC_SPRITE, 0.0, 0.5, 0, true);
-      var game = Core.instance;
-      this.image = game.assets['img/map0.png'];
-      this.frame = n;
-    },
-});
-
-var Effect = Class.create(Sprite, {
-    initialize: function () {
-      Sprite.call(this, EFFECT_SPRITE_WIDTH, EFFECT_SPRITE_HEIGHT);
-      var game = Core.instance;
-      this.image = game.assets['img/effect0.png'];
-      this.frame = 0;
-    },
-
-    onenterframe: function() {
-      this.frame += 1;
-      if (this.frame >= 5) {
-        this.destroy();
-      }
-    },
-
-    destroy: function() {
-      var game = Core.instance;
-      var scene = game.rootScene;
-      scene.removeChild(this);
-    },
-});
 
